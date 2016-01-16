@@ -1,36 +1,51 @@
-## Example 1: Create dir in hadoop and example file on local system. Copy the file from the local system into the hdfs and display the file's size. 
-
+# Example 1: Create dir in hadoop and example file on local system. Copy the file from the local system into the hdfs and display the file's size. 
+```
 [cloudera@quickstart ~]$ hadoop fs -ls /user/cloudera
-##Create directory
+```
+Create directory
+```
 [cloudera@quickstart ~]$ hadoop fs -mkdir /user/cloudera/example 
-## Check if dir was created
+```
+Check if dir was created
+```
 [cloudera@quickstart ~]$ hadoop fs -ls /user/cloudera/
 Found 1 items
 drwxr-xr-x   - cloudera cloudera          0 2016-01-11 01:38 /user/cloudera/example
-
-##create sample.txt in local dir
+```
+Create sample.txt in local dir
+```
 [cloudera@quickstart ~]$ vim sample.txt
-## check if txt was created sucessfully
+```
+check, if txt was created sucessfully
+```
 [cloudera@quickstart ~]$ ls
 cloudera-manager  Downloads                   kerberos  Public      workspace
 cm_api.py         eclipse                     lib       sample.txt
 Desktop           enterprise-deployment.json  Music     Templates
 Documents         express-deployment.json     Pictures  Videos
-## copy sample.txt from local dir into hdfs 
+```
+copy sample.txt from local dir into hdfs 
+```
 [cloudera@quickstart ~]$ hadoop fs -copyFromLocal /home/cloudera/sample.txt /user/cloudera/example
-## check if copying was successful
+```
+check, if copying was successful
+```
 [cloudera@quickstart ~]$ hadoop fs -ls /user/cloudera/example
 Found 1 items
 -rw-r--r--   1 cloudera cloudera         49 2016-01-11 01:46 /user/cloudera/example/sample.txt
-
-##check size of sample.txt, -h means to show it in a "human-readable" way
+```
+check size of sample.txt, -h means to show it in a "human-readable" way
+```
 [cloudera@quickstart ~]$ hadoop fs -du -h /user/cloudera/example
 49  49  /user/cloudera/example/sample.txt
-## So, the size of sample.txt is 49 Bytes
+```
+So, the size of sample.txt is 49 Bytes
 
 
-##Example 2: Getting several different sample files and merge those in one file
+#Example 2: Getting several different sample files and merge those in one file
 
+Getting some example files
+```
 [cloudera@quickstart ~]$ wget http://www.gutenberg.org/cache/epub/1112/pg1112.txt
 --2016-01-11 02:11:21--  http://www.gutenberg.org/cache/epub/1112/pg1112.txt
 Resolving www.gutenberg.org... 152.19.134.47
@@ -66,21 +81,30 @@ Saving to: “pg2264.txt”
 100%[=======================================================================================================================>] 119,848      352K/s   in 0.3s    
 
 2016-01-11 02:11:52 (352 KB/s) - “pg2264.txt” saved [119848/119848]
-
-#Copy downloaded files to hdfs
+```
+Copy downloaded files to hdfs
+```
 [cloudera@quickstart ~]$ hadoop fs -put /home/cloudera/pg1112.txt /home/cloudera/pg1524.txt /home/cloudera/pg2264.txt /user/cloudera/example
-##Check dir 
+```
+Check directory
+```
 [cloudera@quickstart ~]$ hadoop fs -ls /user/cloudera/example
 Found 4 items
 -rw-r--r--   1 cloudera cloudera     178983 2016-01-11 02:17 /user/cloudera/example/pg1112.txt
 -rw-r--r--   1 cloudera cloudera     192944 2016-01-11 02:17 /user/cloudera/example/pg1524.txt
 -rw-r--r--   1 cloudera cloudera     119848 2016-01-11 02:17 /user/cloudera/example/pg2264.txt
 -rw-r--r--   1 cloudera cloudera         49 2016-01-11 01:46 /user/cloudera/example/sample.txt
-## Create Merged File on local system 
+```
+Create merged File on local system 
+```
 [cloudera@quickstart ~]$ hadoop fs -getmerge /user/cloudera/example  ./mergedFile.txt
-## put file on hdfs
+```
+put file on hdfs
+```
 [cloudera@quickstart ~]$ hadoop fs -put /home/cloudera/mergedFile.txt /user/cloudera/example
-##check if file is there
+```
+check if file is there
+```
 [cloudera@quickstart ~]$ hadoop fs -ls /user/cloudera/example
 Found 5 items
 -rw-r--r--   1 cloudera cloudera     491824 2016-01-11 02:29 /user/cloudera/example/mergedFile.txt
@@ -88,26 +112,36 @@ Found 5 items
 -rw-r--r--   1 cloudera cloudera     192944 2016-01-11 02:17 /user/cloudera/example/pg1524.txt
 -rw-r--r--   1 cloudera cloudera     119848 2016-01-11 02:17 /user/cloudera/example/pg2264.txt
 -rw-r--r--   1 cloudera cloudera         49 2016-01-11 01:46 /user/cloudera/example/sample.txt
-##show file size
+```
+show file size
+```
 [cloudera@quickstart ~]$ hadoop fs -du -h  /user/cloudera/example/*
 480.3 K  480.3 K  /user/cloudera/example/mergedFile.txt
 174.8 K  174.8 K  /user/cloudera/example/pg1112.txt
 188.4 K  188.4 K  /user/cloudera/example/pg1524.txt
 117.0 K  117.0 K  /user/cloudera/example/pg2264.txt
 49  49  /user/cloudera/example/sample.txt
+```
+the merged file is the sum of each of the .txt files and also a vim look into the merged file shows it was sucessful.
 
-## Example 3: Creating Snapshots and compare those
-
-## check all snapshottable directories where the current user has permission to take snapshtos. 
+#Example 3: Creating Snapshots and compare those
+check all snapshottable directories where the current user has permission to take snapshtos. 
+```
 [cloudera@quickstart ~]$ hdfs lsSnapshottableDir
 #empty
-## make directory snapshottable
+```
+make directory snapshottable
+```
 [cloudera@quickstart ~]$ hdfs dfsadmin -allowSnapshot /user/cloudera/example
 Allowing snaphot on /user/cloudera/example succeeded
-## creating Snapshot
+```
+creating Snapshot
+```
 [cloudera@quickstart ~]$ hdfs dfs -createSnapshot /user/cloudera/example snapshot1
 Created snapshot /user/cloudera/example/.snapshot/snapshot1
-## check snapshot contents
+```
+check snapshot contents
+```
 [cloudera@quickstart ~]$ hdfs dfs -ls /user/cloudera/example/.snapshot/snapshot1
 Found 5 items
 -rw-r--r--   1 cloudera cloudera     491824 2016-01-11 02:29 /user/cloudera/example/.snapshot/snapshot1/mergedFile.txt
@@ -115,8 +149,10 @@ Found 5 items
 -rw-r--r--   1 cloudera cloudera     192944 2016-01-11 02:17 /user/cloudera/example/.snapshot/snapshot1/pg1524.txt
 -rw-r--r--   1 cloudera cloudera     119848 2016-01-11 02:17 /user/cloudera/example/.snapshot/snapshot1/pg2264.txt
 -rw-r--r--   1 cloudera cloudera         49 2016-01-11 01:46 /user/cloudera/example/.snapshot/snapshot1/sample.txt
-## change orgin directory
-## for that, download new file
+```
+Changing the orgin directory
+At first, download new file
+```
 [cloudera@quickstart ~]$ wget http://www.gutenberg.org/cache/epub/1342/pg1342.txt
 --2016-01-13 00:32:26--  http://www.gutenberg.org/cache/epub/1342/pg1342.txt
 Resolving www.gutenberg.org... 152.19.134.47
@@ -124,7 +160,9 @@ Connecting to www.gutenberg.org|152.19.134.47|:80... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 717574 (701K) [text/plain]
 Saving to: “pg1342.txt”
-## put on hdfs and check if it is in the dir
+```
+put on hdfs and check if it is in the directory
+```
 [cloudera@quickstart ~]$ hadoop fs -put pg1342.txt /user/cloudera/example
 [cloudera@quickstart ~]$ hdfs dfs -ls /user/cloudera/example
 Found 6 items
@@ -134,38 +172,54 @@ Found 6 items
 -rw-r--r--   1 cloudera cloudera     192944 2016-01-11 02:17 /user/cloudera/example/pg1524.txt
 -rw-r--r--   1 cloudera cloudera     119848 2016-01-11 02:17 /user/cloudera/example/pg2264.txt
 -rw-r--r--   1 cloudera cloudera         49 2016-01-11 01:46 /user/cloudera/example/sample.txt
-# create snapshot
+```
+Create snapshot
+```
 [cloudera@quickstart ~]$ hdfs dfs -createSnapshot /user/cloudera/example snapshot2
 Created snapshot /user/cloudera/example/.snapshot/snapshot2
-## compare two snapshots
+```
+Compare two snapshots
+```
 [cloudera@quickstart ~]$ hdfs snapshotDiff /user/cloudera/example snapshot1 snapshot2
 Difference between snapshot snapshot1 and snapshot snapshot2 under directory /user/cloudera/example:
 M	. ## the dir has been modified
 +	./pg1342.txt ##the file has been added
+```
 
-#delete Snapshot1 and verfiy deleting
+delete Snapshot1 and verfiy deleting
+```
 [cloudera@quickstart ~]$ hdfs dfs -deleteSnapshot /user/cloudera/example snapshot1
 [cloudera@quickstart ~]$ hdfs dfs -ls /user/cloudera/example/.snapshot
 Found 1 items
 drwxr-xr-x   - cloudera cloudera          0 2016-01-13 00:38 /user/cloudera/example/.snapshot/snapshot2
-## Delete "important file" 
-# entire dir cannot be deleted, because it is snapshottable
+```
+Delete "important file" 
+entire dir cannot be deleted, because it is snapshottable: 
+```
 [cloudera@quickstart ~]$ sudo -u hdfs hadoop fs -rm -r -skipTrash /user/cloudera/example
 rm: The directory /user/cloudera/example cannot be deleted since /user/cloudera/example is snapshottable and already has snapshots
-# delete sample.txt
+```
+delete sample.txt
+```
 [cloudera@quickstart ~]$ hdfs dfs -rm -r /user/cloudera/example/sample.txt
 16/01/13 01:08:10 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval = 0 minutes, Emptier interval = 0 minutes.
 Deleted /user/cloudera/example/sample.txt
-##recover file 
-# removed sample.txt file is contained in the snapshot2
+```
+Recover file 
+The removed sample.txt file is contained in the snapshot2
+```
 [cloudera@quickstart ~]$ hdfs dfs -cat /user/cloudera/example/.snapshot/snapshot2/sample.txt
 Hello, I am the example for the Big Data Projekt
-# copying the file from the snapshot in the origin dir
+```
+Copying the file from the snapshot in the origin dir
+```
 [cloudera@quickstart ~]$ hdfs dfs -cp /user/cloudera/example/.snapshot/snapshot2/sample.txt /user/cloudera/example
-# the file is recovered
+```
+The file is recovered sucessfully:
+```
 [cloudera@quickstart ~]$ hdfs dfs -cat /user/cloudera/example/sample.txt
 Hello, I am the example for the Big Data Projekt
-
+```
 
 
 
