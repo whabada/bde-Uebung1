@@ -1,4 +1,4 @@
-# Example 1: Create dir in hadoop and example file on local system. Copy the file from the local system into the hdfs and display the file's size. 
+## Example 1: Create dir in hadoop and example file on local system. Copy the file from the local system into the hdfs and display the file's size. 
 ```
 [cloudera@quickstart ~]$ hadoop fs -ls /user/cloudera
 ```
@@ -42,7 +42,7 @@ check size of sample.txt, -h means to show it in a "human-readable" way
 So, the size of sample.txt is 49 Bytes
 
 
-#Example 2: Getting several different sample files and merge those in one file
+##Example 2: Getting several different sample files and merge those in one file
 
 Getting some example files
 ```
@@ -124,7 +124,7 @@ show file size
 ```
 the merged file is the sum of each of the .txt files and also a vim look into the merged file shows it was sucessful.
 
-#Example 3: Creating Snapshots and compare those
+##Example 3: Creating Snapshots and compare those
 check all snapshottable directories where the current user has permission to take snapshtos. 
 ```
 [cloudera@quickstart ~]$ hdfs lsSnapshottableDir
